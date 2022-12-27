@@ -1,3 +1,2 @@
 #[derive(Debug, Clone)]
-pub struct User {
-}
+pub struct Game {}
