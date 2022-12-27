@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 telebotrs_macro = { path="./telebotrs_macro" }
-
+serde = { version = "1.0.152", features = ["derive"] }

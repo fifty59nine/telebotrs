@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
 use crate::types::data_types::{
@@ -11,7 +12,7 @@ use crate::types::keyboard_types::InlineKeyboardMarkup;
 use crate::types::{ContentType, MessageHeader};
 
 #[allow(dead_code)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
     pub message: MessageHeader,
     pub message_thread_id: Option<i64>,
