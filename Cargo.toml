@@ -1,0 +1,8 @@
+[package]
+name = "telebotrs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+telebotrs_macro = { path="../telebotrs_macro" }
+
