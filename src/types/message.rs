@@ -9,12 +9,14 @@ use crate::types::data_types::{
     VideoChatStarted, VideoNote, Voice, WebAppData,
 };
 use crate::types::keyboard_types::InlineKeyboardMarkup;
-use crate::types::{ContentType, MessageHeader};
+use crate::types::ContentType;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
-    pub message: MessageHeader,
+    pub message_id: i64,
+    pub date: i64,
+    pub chat: Chat,
     pub message_thread_id: Option<i64>,
     pub from: Option<User>,
     pub sender_chat: Option<Chat>,

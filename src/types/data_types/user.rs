@@ -9,3 +9,20 @@ pub struct User {
     pub language_code: String,
 }
 
+impl User {
+    pub fn new(
+        id: i64,
+        is_bot: bool,
+        first_name: impl Into<String>,
+        username: impl Into<String>,
+        language_code: impl Into<String>,
+    ) -> Self {
+        User {
+            id,
+            is_bot,
+            first_name: first_name.into(),
+            username: username.into(),
+            language_code: language_code.into(),
+        }
+    }
+}
