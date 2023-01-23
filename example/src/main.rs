@@ -1,13 +1,15 @@
 use telebotrs::{
     message_handler,
-    types::{message_types::TextMessage, ContentType::Message,
-        data_types::{Chat, User}
+    types::{
+        data_types::{Chat, User},
+        message_types::TextMessage,
+        ContentType::Message,
     },
+    Bot,
 };
 
-
 fn main() {
-    let _txtmsg = TextMessage::new(0, 0, Chat::new(0, "Test", "Test", "test"), User::new(0, false, "Test", "Test", "UA"), "Hello bot!"); 
+    let bot = Bot::new();
 }
 
 #[message_handler(Message)]
