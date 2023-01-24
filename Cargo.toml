@@ -4,5 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-telebotrs_macro = { path="./telebotrs_macro" }
+telebotrs_macro = { path="./telebotrs_macro", optional=true }
 serde = { version = "1.0.152", features = ["derive"] }
+
+[features]
+message_handler = ["dep:telebotrs_macro"]

@@ -1,5 +1,5 @@
 use proc_macro::TokenStream;
-use quote::quote;
+use quote::{quote, ToTokens};
 /*
 use proc_macro_error::proc_macro_error;
 use quote::TokenStreamExt;
@@ -13,14 +13,17 @@ use syn::punctuated::Punctuated;
 pub fn message_handler(attr: TokenStream, item: TokenStream) -> TokenStream {
     let item_fn = syn::parse_macro_input!(item as syn::ItemFn);
     let item_attr = syn::parse_macro_input!(attr as syn::ExprPath);
-    println!("Attrs: {:?}", item_fn.attrs);
     let attr_name = &item_attr.path.segments.last().unwrap().ident.to_string();
-    println!("Attr: {:?}\nNonP: {:?}", attr_name, item_attr);
+
     let fn_name = &item_fn.sig.ident;
+    println!(
+        "Message handler in {}() for {} with params: {:?}",
+        &fn_name.to_string(),
+        &attr_name,
+        &item_fn.attrs
+    );
     quote! {
         #fn_name();
     };
     TokenStream::new()
 }
-
-
