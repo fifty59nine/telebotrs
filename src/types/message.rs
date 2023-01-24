@@ -33,7 +33,7 @@ pub struct Message {
     pub edit_date: Option<i64>,
     pub has_protected_content: Option<bool>,
     pub media_group_id: Option<String>,
-    pub author_signature: String,
+    pub author_signature: Option<String>,
     pub text: Option<String>,
     pub entities: Option<Vec<MessageEntity>>,
     pub animation: Option<Animation>,
@@ -78,7 +78,7 @@ pub struct Message {
     pub video_chat_participants_invite: Option<VideoChatParticipantsInvited>,
     pub web_app_data: Option<WebAppData>,
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    pub content_type: ContentType,
+    pub content_type: Option<ContentType>,
 }
 
 impl Display for Message {
