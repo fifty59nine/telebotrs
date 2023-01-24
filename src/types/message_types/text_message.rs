@@ -1,4 +1,7 @@
-use crate::types::data_types::{Chat, User};
+use crate::types::{
+    data_types::{Chat, User},
+    ContentType, Message,
+};
 
 #[derive(Debug, Clone)]
 pub struct TextMessage {
@@ -23,6 +26,26 @@ impl TextMessage {
             chat,
             from,
             text: text.into(),
+        }
+    }
+}
+
+impl From<Message> for TextMessage {
+    fn from(value: Message) -> Self {
+        let CT = value.content_type.clone().unwrap();
+        if matches!(CT, ContentType::Message) || matches!(CT, ContentType::Command(_)) {
+            panic!(
+                "Expected \"Message with content_type Message or Commands\", found: {:?} ",
+                value.content_type.unwrap()
+            );
+        } else {
+            TextMessage::new(
+                value.message_id,
+                value.date,
+                value.chat,
+                value.from.unwrap_or_default(),
+                value.text.unwrap(),
+            )
         }
     }
 }

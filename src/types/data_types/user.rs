@@ -26,3 +26,9 @@ impl User {
         }
     }
 }
+
+impl Default for User {
+    fn default() -> Self {
+        User::new(0, false, "Default", "default", "UA")
+    }
+}

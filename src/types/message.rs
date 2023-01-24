@@ -86,3 +86,97 @@ impl Display for Message {
         writeln!(f, "{:?}", self)
     }
 }
+
+impl Message {
+    pub fn set_content_type(&mut self) {
+        self.content_type = Some(Message::get_message_content_type(&self));
+    }
+
+    fn get_message_content_type(message: &Message) -> ContentType {
+        if let Some(txt) = &message.text {
+            if txt.starts_with('/') {
+                ContentType::Command(txt.replace('/', ""))
+            } else {
+                ContentType::Message
+            }
+        } else if let Some(_) = message.audio {
+            ContentType::Audio
+        } else if let Some(_) = message.animation {
+            ContentType::Animation
+        } else if let Some(_) = message.document {
+            ContentType::Document
+        } else if let Some(_) = message.game {
+            ContentType::Game
+        } else if let Some(_) = message.photo {
+            ContentType::Photo
+        } else if let Some(_) = message.sticker {
+            ContentType::Sticker
+        } else if let Some(_) = message.video {
+            ContentType::Video
+        } else if let Some(_) = message.video_note {
+            ContentType::VideoNote
+        } else if let Some(_) = message.voice {
+            ContentType::Voice
+        } else if let Some(_) = message.contact {
+            ContentType::Contact
+        } else if let Some(_) = message.venue {
+            ContentType::Venue
+        } else if let Some(_) = message.location {
+            ContentType::Location
+        } else if let Some(_) = message.poll {
+            ContentType::Poll
+        } else if let Some(_) = message.dice {
+            ContentType::Dice
+        } else if let Some(_) = message.new_chat_member {
+            ContentType::NewChatMember
+        } else if let Some(_) = message.left_chat_member {
+            ContentType::LeftChatMember
+        } else if let Some(_) = message.invoice {
+            ContentType::Invoice
+        } else if let Some(_) = message.successful_payment {
+            ContentType::SuccessfulPayment
+        } else if let Some(_) = message.connected_website {
+            ContentType::ConnectedWebsite
+        } else if let Some(_) = message.message_auto_delete_timer_changed {
+            ContentType::MessageAutoDeleteTimerChanged
+        } else if let Some(_) = message.migrate_from_chat_id {
+            ContentType::MigrateFromChatId
+        } else if let Some(_) = message.migrate_to_chat_id {
+            ContentType::MigrateToChatId
+        } else if let Some(_) = message.pinned_message {
+            ContentType::PinnedMessage
+        } else if let Some(_) = message.new_chat_title {
+            ContentType::NewChatTitle
+        } else if let Some(_) = message.new_chat_member {
+            ContentType::NewChatMember
+        } else if let Some(_) = message.new_chat_photo {
+            ContentType::NewChatPhoto
+        } else if let Some(_) = message.delete_chat_photo {
+            ContentType::DeleteChatPhoto
+        } else if let Some(_) = message.group_chat_created {
+            ContentType::GroupChatCreated
+        } else if let Some(_) = message.passport_data {
+            ContentType::PassportData
+        } else if let Some(_) = message.proximity_alert_triggered {
+            ContentType::ProximityAlertTriggered
+        } else if let Some(_) = message.video_chat_scheduled {
+            ContentType::VideoChatScheduled
+        } else if let Some(_) = message.video_chat_started {
+            ContentType::VideoChatStarted
+        } else if let Some(_) = message.video_chat_ended {
+            ContentType::VideoChatEnded
+        } else if let Some(_) = message.video_chat_participants_invite {
+            ContentType::VideoChatParticipantsInvited
+        } else if let Some(_) = message.web_app_data {
+            ContentType::WebAppData
+        } else if let Some(_) = message.forum_topic_created {
+            ContentType::ForumTopicCreated
+        } else if let Some(_) = message.forum_topic_closed {
+            ContentType::ForumTopicClosed
+        } else if let Some(_) = message.forum_topic_reopened {
+            ContentType::ForumTopicReopened
+        } else {
+            ContentType::Unknown
+        }
+    }
+}

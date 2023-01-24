@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub enum ContentType {
     Message,
     Command(String),
@@ -33,10 +33,6 @@ pub enum ContentType {
     GroupChatCreated,
     PassportData,
     ProximityAlertTriggered,
-    VoiceChatScheduled,
-    VoiceChatStarted,
-    VoiceChatEnded,
-    VoiceChatParticipantsInvited,
     WebAppData,
     ForumTopicClosed,
     ForumTopicCreated,
@@ -45,10 +41,6 @@ pub enum ContentType {
     VideoChatStarted,
     VideoChatEnded,
     VideoChatParticipantsInvited,
-    ForumTopicEdited,
-    GeneralForumTopicHidden,
-    GeneralForumTopicUnhidden,
-    WriteAccessAllowed,
     Any,
     Unknown,
 }
