@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -43,4 +45,16 @@ pub enum ContentType {
     VideoChatParticipantsInvited,
     Any,
     Unknown,
+}
+
+impl ContentType {
+    pub fn to_string(&self) -> String {
+        format!("{:?}", self).to_string()
+    }
+}
+
+impl Display for ContentType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self)
+    }
 }
