@@ -9,6 +9,7 @@ serde = { version = "1.0.152", features = ["derive"] }
 reqwest = "0.11.14"
 serde_json = "1.0.91"
 anyhow = "1.0.68"
+tokio = "1.25"
 
 [features]
 message_handler = ["dep:telebotrs_macro"]

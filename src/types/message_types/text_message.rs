@@ -30,22 +30,24 @@ impl TextMessage {
     }
 }
 
-impl From<Message> for TextMessage {
-    fn from(value: Message) -> Self {
-        let CT = value.content_type.clone().unwrap();
-        if matches!(CT, ContentType::Message) || matches!(CT, ContentType::Command(_)) {
-            panic!(
+impl TryFrom<Message> for TextMessage {
+    type Error = String;
+
+    fn try_from(value: Message) -> Result<Self, Self::Error> {
+        let ct = value.content_type.clone().unwrap();
+        if matches!(ct, ContentType::Message) || matches!(ct, ContentType::Command(_)) {
+            Err(format!(
                 "Expected \"Message with content_type Message or Commands\", found: {:?} ",
                 value.content_type.unwrap()
-            );
+            ))
         } else {
-            TextMessage::new(
+            Ok(TextMessage::new(
                 value.message_id,
                 value.date,
                 value.chat,
                 value.from.unwrap_or_default(),
                 value.text.unwrap(),
-            )
+            ))
         }
     }
 }

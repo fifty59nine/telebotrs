@@ -47,12 +47,6 @@ pub enum ContentType {
     Unknown,
 }
 
-impl ContentType {
-    pub fn to_string(&self) -> String {
-        format!("{:?}", self).to_string()
-    }
-}
-
 impl Display for ContentType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self)

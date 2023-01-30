@@ -1,5 +1,6 @@
 use crate::types::{message_parse_object::Root, Message};
 use reqwest::Url;
+use tokio::time::{sleep, Duration};
 
 pub struct Bot {
     token: String,
@@ -18,32 +19,26 @@ impl Bot {
     /// `interval` - sleep time in ms between geting updates (Default: 20)
     /// `none_stop` - don't stopping bot on error (Default: true)
     pub async fn start_polling(&mut self, interval: Option<u64>, none_stop: Option<bool>) {
-        let interval_handler = match interval {
-            Some(n) => n,
-            None => 20,
-        };
-        let none_stop_handler = match none_stop {
-            Some(n) => n,
-            None => true,
-        };
+        let interval_handler = interval.unwrap_or(20);
+        let none_stop_handler = none_stop.unwrap_or(true);
 
         loop {
             let messages_result = self.get_updates().await;
             match messages_result {
                 Err(e) => {
                     if none_stop_handler {
-                        println!("Exception on getUpdates in start_polling method: {e}");
+                        eprintln!("Exception on getUpdates in start_polling method: {e}");
                     } else {
                         panic!("Exception on getUpdates in start_polling method: {e}");
                     }
-                    println!("Sleeping exception timeout (10s)");
-                    std::thread::sleep(std::time::Duration::from_secs(10));
+                    eprintln!("Sleeping exception timeout (10s)");
+                    sleep(Duration::from_secs(10)).await;
                 }
                 Ok(mut messages) => {
                     // Here we work with messages which accepted from api
                     for msg in messages.iter_mut() {
                         msg.set_content_type();
-                        let msg_data = msg.clone();
+                        let msg_data = msg.clone(); // as_ref ?
                         println!(
                             "Message from {} ({}): {} | {:?}",
                             msg_data.chat.username,
@@ -55,12 +50,12 @@ impl Bot {
                 }
             }
 
-            std::thread::sleep(std::time::Duration::from_millis(interval_handler));
+            sleep(Duration::from_millis(interval_handler)).await;
         }
 
         // TODO:
-        // 1) getUpdates
-        // 2) Parse answer to the message_parse_object
+        // 1) getUpdates +
+        // 2) Parse answer to the message_parse_object +
         // 3) write objects like document, audio etc.
         // 4) send to message_handler
     }
@@ -73,32 +68,20 @@ impl Bot {
             data.push(("offset".to_string(), offset.to_string()))
         }
 
-        let updates = self.request("getUpdates", data).await;
+        let updates = self.request("getUpdates", data).await?;
 
-        // Check request for errors
-        if let Err(n) = updates {
-            return Err(n.into());
-        } else {
-            let root_result: Result<Root, serde_json::Error> =
-                serde_json::from_str(&updates.unwrap());
-            match root_result {
-                Err(n) => {
-                    return Err(n.into());
-                }
-                Ok(n) => {
-                    // Here all parsed good. Working with Root object
-                    if let Some(last) = &n.result.last() {
-                        // updating last_id aka offset
-                        self.last_update_id = last.update_id;
-                    }
-                    let mut message_array: Vec<Message> = Vec::with_capacity(n.result.len());
-                    n.result
-                        .iter()
-                        .for_each(|obj| message_array.push(obj.message.clone()));
-                    return Ok(message_array);
-                }
-            }
+        let root: Root = serde_json::from_str(&updates)?;
+        // Here all parsed good. Working with Root object
+        if let Some(last) = &root.result.last() {
+            // updating last_id aka offset
+            self.last_update_id = last.update_id;
         }
+
+        return Ok(root
+            .result
+            .into_iter()
+            .map(|obj| obj.message)
+            .collect::<Vec<_>>());
     }
 
     async fn request(

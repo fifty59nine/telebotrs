@@ -82,14 +82,14 @@ impl Arg {
                     syn::Meta::List(list) => {
                         // We in handler with attr
                         handling_type = String::from("Command");
-                        /*
-                                                if list.nested.len() < 1 {
-                                                    return Err(get_standart_error(Some(
-                                                        "Invalid usage of message_handler attribute. Required at least 1 argument"
-                                                            .to_string(),
-                                                    )));
-                                                }
-                        */
+
+                        if list.nested.len() < 1 {
+                            return Err(get_standart_error(Some(
+                                "Invalid usage of message_handler attribute. Required at least 1 argument"
+                                        .to_string(),
+                            )));
+                        }
+
                         let handling_param_lit = &list.nested[0];
                         match handling_param_lit {
                             syn::NestedMeta::Lit(lit) => match lit {
