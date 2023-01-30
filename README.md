@@ -15,7 +15,7 @@ use tokio;
 #[tokio::main]
 fn main() {
   let bot = Bot("Token");
-  bot.start_polling();
+  bot.start_polling().await;
 }
 
 #[message_handler(ContentType::Message)]
